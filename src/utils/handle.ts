@@ -1,12 +1,12 @@
-import { Bot, EventSubscription } from "../types/Bot";
+import { EventSubscription } from "../types/Bot";
 
 // Make the handle function async so multiple events can be handled one after another.
-export async function handle(this: Bot, event: EventSubscription) {
+export async function handle(event: EventSubscription) {
   const [subscription, handler] = event;
   try {
-    const matchesElement = subscription(this);
+    const matchesElement = subscription();
     if (matchesElement) {
-      return handler(this);
+      return handler();
     }
   } catch (error) {
     console.error(error);
