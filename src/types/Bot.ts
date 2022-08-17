@@ -1,18 +1,21 @@
 import { Notification } from "./index";
-
 /** A function to determine whether the subscription will be set.
- *
- * The function will have access to the bot methods and the notification object.
  * */
-export type EventSubscriptionFunction = (bot: Bot) => boolean;
+export type EventSubscriptionFunction = () => boolean;
+export type EventSubscriptionHandler = () => void | Promise<void>;
 
 export type EventSubscription = [
   EventSubscriptionFunction,
-  (bot: Bot) => void | Promise<void>
+  EventSubscriptionHandler
 ];
 
 export type Bot = {
   notification: Notification;
-  _stack: EventSubscription[];
+  stack: EventSubscription[];
   handle: (event: EventSubscription) => void | Promise<void>;
+  on: (
+    subscriber: EventSubscriptionFunction,
+    callback: EventSubscriptionHandler
+  ) => void;
+  initialize: () => Promise<void>;
 };

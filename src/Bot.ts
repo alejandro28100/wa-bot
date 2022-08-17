@@ -1,14 +1,14 @@
-import { Bot, Notification } from "./types";
+import { getMessage, handle, initialize, on } from "./utils";
+import { Notification, Bot as BotInterface } from "./types";
 
-import { handle, init, on } from "./utils";
-
-export const createBot = function (this: Bot, notification: Notification) {
-  this.notification = notification;
-  this._stack = [];
-
-  return {
-    on: on,
-    handle: handle,
-    init: init,
-  };
-};
+export class Bot implements BotInterface {
+  stack = [];
+  handle = handle;
+  getMessage = getMessage;
+  on = on;
+  initialize = initialize;
+  notification;
+  constructor(notification: Notification) {
+    this.notification = notification;
+  }
+}
