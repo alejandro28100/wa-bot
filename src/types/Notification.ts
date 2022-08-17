@@ -32,7 +32,7 @@ type StatusesNotificationChangeValue = {
 
 type Status = {
   status: string;
-  timestamp: number;
+  timestamp: string;
   id: string;
   recipient_id: string;
 };
@@ -42,8 +42,8 @@ type MessagesNotificationChangeValue = {
   statuses: never;
 };
 
-type Message = MessageTypes & {
+export type Message = MessageTypes & {
   from: string;
   id: string;
-  timestamp: number;
+  timestamp: string;
 };
