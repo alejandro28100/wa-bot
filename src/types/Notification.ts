@@ -12,17 +12,26 @@ type NotificationEntry = {
 };
 
 type MessagesNotificationChange = {
-  value: NotificationChangeValue[];
+  value: NotificationChangeValue;
   field: "messages";
 };
 
 type NotificationChangeValue = {
+  messaging_product: "whatsapp";
   metadata: ChangeMetadata;
+  contacts: NotificationContact[];
 } & (MessagesNotificationChangeValue | StatusesNotificationChangeValue);
 
 type ChangeMetadata = {
   display_phone_number: string;
   phone_number_id: string;
+};
+
+type NotificationContact = {
+  profile: {
+    name: string;
+  };
+  wa_id: string;
 };
 
 type StatusesNotificationChangeValue = {
