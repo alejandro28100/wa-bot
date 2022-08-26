@@ -3,6 +3,9 @@ type TextMessage = {
   text: {
     body: string;
   };
+  image: never;
+  interactive: never;
+  button: never;
 };
 
 type MediaMessage = {
@@ -13,11 +16,17 @@ type MediaMessage = {
     sha256: string;
     id: string;
   };
+  interactive: never;
+  button: never;
+  text: never;
 };
 
 type InteractiveMessage = {
   type: "interactive";
   interactive: AnswerFromListMessage | ReplyButtonMessage;
+  text: never;
+  image: never;
+  button: never;
 };
 
 type ReplyButtonMessage = {
@@ -26,6 +35,7 @@ type ReplyButtonMessage = {
     title: string;
   };
   type: string;
+  list_reply: never;
 };
 
 type AnswerFromListMessage = {
@@ -35,6 +45,7 @@ type AnswerFromListMessage = {
     description: string;
   };
   type: "list_reply";
+  button_reply: never;
 };
 
 type ButtonMessage = {
@@ -43,6 +54,9 @@ type ButtonMessage = {
     text: string;
     payload: string;
   };
+  interactive: never;
+  text: never;
+  image: never;
 };
 
 export type MessageTypes =
