@@ -19,5 +19,6 @@ export type Bot = {
     callback: EventSubscriptionHandler
   ) => void;
   onListMessageAnswer: (callback: () => void | Promise<void>) => void;
+  onQuickReplyButtonAnswer: (callback: () => void | Promise<void>) => void;
   initialize: () => Promise<void>;
 };

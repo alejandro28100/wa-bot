@@ -1,4 +1,10 @@
-import { getMessage, handle, initialize, on } from "./utils";
+import {
+  getMessage,
+  handle,
+  initialize,
+  on,
+  onQuickReplyButtonAnswer,
+} from "./utils";
 import { Notification, Bot as BotInterface } from "./types";
 import onListMessageAnswer from "./utils/onListMessageAnswer";
 
@@ -8,6 +14,7 @@ export class Bot implements BotInterface {
   getMessage = getMessage;
   on = on;
   onListMessageAnswer = onListMessageAnswer;
+  onQuickReplyButtonAnswer = onQuickReplyButtonAnswer;
   initialize = initialize;
   notification;
   constructor(notification: Notification) {
