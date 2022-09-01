@@ -12,7 +12,6 @@ export type EventSubscription = [
 export type Bot = {
   notification: Notification;
   stack: EventSubscription[];
-  handle: (event: EventSubscription) => void | Promise<void>;
   getMessage: () => Message | undefined;
   on: (
     subscriber: EventSubscriptionFunction,
