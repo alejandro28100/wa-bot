@@ -13,4 +13,12 @@ export class Bot implements BotInterface {
   constructor(notification: Notification) {
     this.notification = notification;
   }
+
+  createFlow() {
+    return new Bot(this.notification);
+  }
+
+  useFlow(flowInstance: Bot) {
+    this.stack = [...this.stack, ...flowInstance.stack];
+  }
 }
