@@ -1,5 +1,5 @@
-import { getMessage, initialize, on, onQuickReplyButtonAnswer } from "./utils";
-import { Notification, Bot as BotInterface } from "./types";
+import { getMessage, initialize, on } from "./utils";
+import { Notification, Bot as BotInterface, ButtonMessage } from "./types";
 import onListMessageAnswer from "./utils/onListMessageAnswer";
 
 export class Bot implements BotInterface {
@@ -7,11 +7,24 @@ export class Bot implements BotInterface {
   getMessage = getMessage;
   on = on;
   onListMessageAnswer = onListMessageAnswer;
-  onQuickReplyButtonAnswer = onQuickReplyButtonAnswer;
   initialize = initialize;
   notification;
   constructor(notification: Notification) {
     this.notification = notification;
+  }
+
+  onQuickReplyButtonAnswer(
+    subscriberFn: (message: ButtonMessage) => boolean,
+    callback: () => void | Promise<void>
+  ) {
+    const subscriber = () => {
+      const message = this.getMessage();
+      if (message && message.type === "button") {
+        return subscriberFn(message);
+      }
+      return false;
+    };
+    return this.on(subscriber, callback);
   }
 
   createFlow() {

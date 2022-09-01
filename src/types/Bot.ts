@@ -1,4 +1,4 @@
-import { Notification, Message } from "./index";
+import { Notification, Message, ButtonMessage } from "./index";
 /** A function to determine whether the subscription will be set.
  * */
 export type EventSubscriptionFunction = () => boolean;
@@ -17,7 +17,13 @@ export type Bot = {
     subscriber: EventSubscriptionFunction,
     callback: EventSubscriptionHandler
   ) => void;
-  onListMessageAnswer: (callback: () => void | Promise<void>) => void;
-  onQuickReplyButtonAnswer: (callback: () => void | Promise<void>) => void;
+  onListMessageAnswer: (
+    subscriberFn: (message: Message) => boolean,
+    callback: () => void | Promise<void>
+  ) => void;
+  onQuickReplyButtonAnswer: (
+    subscriberFn: (message: ButtonMessage) => boolean,
+    callback: () => void | Promise<void>
+  ) => void;
   initialize: () => Promise<void>;
 };

@@ -48,7 +48,7 @@ type AnswerFromListMessage = {
   button_reply: never;
 };
 
-type ButtonMessage = {
+export type ButtonMessage = {
   type: "button";
   button: {
     text: string;
