@@ -1,14 +1,19 @@
-type TextMessage = {
+type Message = {
+  /**phone number if */
+  from: string;
+  /** wamid.ID*/
+  id: string;
+  /**timestamp*/
+  timestamp: string;
+};
+type TextMessage = Message & {
   type: "text";
   text: {
     body: string;
   };
-  image: never;
-  interactive: never;
-  button: never;
 };
 
-type MediaMessage = {
+type MediaMessage = Message & {
   type: "media";
   image: {
     caption: string;
@@ -16,26 +21,20 @@ type MediaMessage = {
     sha256: string;
     id: string;
   };
-  interactive: never;
-  button: never;
-  text: never;
 };
 
-type InteractiveMessage = {
+type InteractiveMessage = Message & {
   type: "interactive";
   interactive: AnswerFromListMessage | ReplyButtonMessage;
-  text: never;
-  image: never;
-  button: never;
 };
 
+/** Response of a reply button sent */
 type ReplyButtonMessage = {
   button_reply: {
     id: string;
     title: string;
   };
-  type: string;
-  list_reply: never;
+  type: "button_reply";
 };
 
 type AnswerFromListMessage = {
@@ -45,18 +44,15 @@ type AnswerFromListMessage = {
     description: string;
   };
   type: "list_reply";
-  button_reply: never;
 };
 
+/** Quick reply button in an interactive message template */
 export type ButtonMessage = {
   type: "button";
   button: {
     text: string;
     payload: string;
   };
-  interactive: never;
-  text: never;
-  image: never;
 };
 
 export type MessageTypes =
