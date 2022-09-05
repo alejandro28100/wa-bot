@@ -1,16 +1,34 @@
 import { getMessage, initialize, on } from "./utils";
-import { Notification, Bot as BotInterface, ButtonMessage } from "./types";
-import onListMessageAnswer from "./utils/onListMessageAnswer";
+import {
+  Notification,
+  Bot as BotInterface,
+  ButtonMessage,
+  AnswerFromListMessage,
+} from "./types";
 
 export class Bot implements BotInterface {
   stack = [];
   getMessage = getMessage;
   on = on;
-  onListMessageAnswer = onListMessageAnswer;
   initialize = initialize;
   notification;
   constructor(notification: Notification) {
     this.notification = notification;
+  }
+
+  onListMessageAnswer(
+    subscriberFn: (message: AnswerFromListMessage) => boolean,
+    callback: () => void | Promise<void>
+  ) {
+    const subscriber = () => {
+      const message = this.getMessage();
+      return (
+        message?.type === "interactive" &&
+        "list_reply" in message?.interactive &&
+        subscriberFn(message as AnswerFromListMessage)
+      );
+    };
+    return this.on(subscriber, callback);
   }
 
   onQuickReplyButtonAnswer(
