@@ -1,24 +1,42 @@
-import { getMessage, initialize, on } from "./utils";
+import { getMessage, initialize } from "./utils";
 import {
   Notification,
   Bot as BotInterface,
   ButtonMessage,
   AnswerFromListMessage,
+  EventSubscription,
+  EventSubscriptionFunction,
+  EventSubscriptionHandler,
+  EventSubscriptionOnErrorHandler,
 } from "./types";
 
 export class Bot implements BotInterface {
-  stack = [];
+  stack: EventSubscription[] = [];
   getMessage = getMessage;
-  on = on;
   initialize = initialize;
   notification;
   constructor(notification: Notification) {
     this.notification = notification;
   }
 
+  on(
+    subscriber: EventSubscriptionFunction,
+    callback: EventSubscriptionHandler,
+    onError?: EventSubscriptionOnErrorHandler
+  ) {
+    if (typeof subscriber !== "function")
+      throw new Error("subscriber must be a function");
+
+    if (typeof callback !== "function")
+      throw new Error("callback handler must be a function");
+
+    this.stack.push([subscriber, callback, onError]);
+  }
+
   onListMessageAnswer(
     subscriberFn: (message: AnswerFromListMessage) => boolean,
-    callback: () => void | Promise<void>
+    callback: () => void | Promise<void>,
+    onError?: EventSubscriptionOnErrorHandler
   ) {
     const subscriber = () => {
       const message = this.getMessage();
@@ -28,12 +46,13 @@ export class Bot implements BotInterface {
         subscriberFn(message as AnswerFromListMessage)
       );
     };
-    return this.on(subscriber, callback);
+    return this.on(subscriber, callback, onError);
   }
 
   onQuickReplyButtonAnswer(
     subscriberFn: (message: ButtonMessage) => boolean,
-    callback: () => void | Promise<void>
+    callback: () => void | Promise<void>,
+    onError?: EventSubscriptionOnErrorHandler
   ) {
     const subscriber = () => {
       const message = this.getMessage();
@@ -42,7 +61,7 @@ export class Bot implements BotInterface {
       }
       return false;
     };
-    return this.on(subscriber, callback);
+    return this.on(subscriber, callback, onError);
   }
 
   createFlow() {
